@@ -2,83 +2,133 @@
 
 <div align="center">
 
-**The Developer-First Trust Layer for AI Agents**
+**The identity and integrity guard for AI agents**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=flat&logo=linkedin)](https://www.linkedin.com/company/capiscio)
 [![Reddit](https://img.shields.io/badge/Reddit-Join-orange?style=flat&logo=reddit)](https://www.reddit.com/r/capiscio)
 [![Twitter Follow](https://img.shields.io/twitter/follow/capiscio?style=social)](https://x.com/capiscio)
 
-[Website](https://capisc.io) • [Documentation](https://docs.capisc.io) • [Blog](https://capisc.io/blog) • [Roadmap](https://capisc.io/resources/roadmap)
+[Website](https://capisc.io) • [Documentation](https://docs.capisc.io) • [Blog](https://capisc.io/blog) • [Roadmap](https://capisc.io/platform)
 
 </div>
 
 ---
 
-## ⚡ Zero Trust for the Agent Ecosystem
+## ⚡ What CapiscIO Does
 
-**CapiscIO** is the open-source standard for **Agent-to-Agent (A2A) Security**. We provide the infrastructure developers need to secure AI agent communication, verify identity, and enforce protocol compliance without the headache.
+CapiscIO is an open source **runtime guard** for AI agents.
 
-Stop agent spoofing, replay attacks, and payload tampering in **<1ms**.
+We enforce:
 
-### Why CapiscIO?
+- **Identity** – Ed25519 signed envelopes so you know which agent actually called you.  
+- **Payload integrity** – SHA-256 body hashing so tampered requests are rejected.  
+- **Freshness** – strict `iat` / `exp` checks so replayed traffic die on arrival.
 
-- **Developer Centric**: CLI-first, CI/CD ready, and drop-in middleware.
-- **Protocol Agnostic**: Works with REST, MCP, and the A2A Protocol.
-- **Performance Obsessed**: Go-based core, sub-millisecond overhead.
+All with **sub-millisecond overhead** in Python and Go.
+
+Use CapiscIO as:
+
+- A **Python SDK** (SimpleGuard) to guard your agent endpoints.  
+- A **Go middleware / sidecar** in front of HTTP services.  
+- A **CLI** (Node or Python) to validate agent cards and test endpoints in CI.
+
+---
+
+## 🤔 Why CapiscIO?
+
+- **Developer first**  
+  CLI ready, CI friendly, and a drop-in guard you can wire in with a couple of lines.
+
+- **Protocol aware**  
+  Built for the Agent-to-Agent (A2A) protocol and designed to extend to MCP and other agent standards.
+
+- **Performance obsessed**  
+  Go based core and a pure Python guard, both adding well under 1 ms per call in our benchmarks.
 
 ---
 
 ## 🛠️ The Open Source Stack
 
-We maintain a suite of high-performance tools to secure the entire agent lifecycle.
+We keep the stack small and focused: core enforcement, runtime guard, and CLI tooling.
 
-### 🏗️ Core Infrastructure
-
-| Repository | Description | Tech Stack |
-|------------|-------------|------------|
-| **[capiscio-core](https://github.com/capiscio/capiscio-core)** | **The Authority Layer.** The high-performance engine for issuing Trust Badges, verifying JWS signatures, and enforcing A2A compliance. | `Go` |
-
-### 🛡️ Runtime Security (Middleware)
+### 🧠 Core Enforcement
 
 | Repository | Description | Tech Stack |
 |------------|-------------|------------|
-| **[capiscio-sdk-python](https://github.com/capiscio/capiscio-sdk-python)** | **Drop-in Enforcement.** Secure your FastAPI, Flask, or Django agents with 3 lines of code. Auto-generates keys and enforces body integrity. | `Python` |
+| **[capiscio-core](https://github.com/capiscio/capiscio-core)** | High performance enforcement engine used by sidecars and CLIs. Verifies Ed25519 JWS envelopes, enforces body hashes, and checks timestamps with microsecond-level overhead. | `Go` |
 
-### 🔧 Developer Tooling & CI/CD
+### 🛡️ Runtime Guard (SDK)
 
 | Repository | Description | Tech Stack |
 |------------|-------------|------------|
-| **[capiscio-node](https://github.com/capiscio/capiscio-node)** | **The Official CLI.** Validate agent cards, test endpoints, and check compliance locally. | `TypeScript` |
-| **[validate-a2a](https://github.com/capiscio/validate-a2a)** | **GitHub Action.** Automate agent validation in your CI/CD pipeline. Block broken agents before deployment. | `TypeScript` |
-| **[capiscio-python](https://github.com/capiscio/capiscio-python)** | **Python CLI Wrapper.** Seamless integration for Python-heavy workflows. | `Python` |
+| **[capiscio-sdk-python](https://github.com/capiscio/capiscio-sdk-python)** | Drop-in guard for Python services (FastAPI / Flask / etc). Auto-discovers keys, enforces identity, payload integrity, and replay protection at the HTTP boundary. | `Python` |
+
+### 🔧 Developer Tooling & CLI
+
+Both CLIs wrap `capiscio-core`, so dev-time checks and runtime enforcement share the same semantics.
+
+| Repository | Description | Tech Stack |
+|------------|-------------|------------|
+| **[capiscio-node](https://github.com/capiscio/capiscio-node)** | Node-based `capiscio` CLI. Validate agent cards, test live endpoints, and run security checks locally or in CI. | `TypeScript / Node` |
+| **[capiscio-python](https://github.com/capiscio/capiscio-python)** | Python package `capiscio` exposing the same CLI experience and core behaviour for Python-centric environments. | `Python` |
+| **[validate-a2a](https://github.com/capiscio/validate-a2a)** | GitHub Action that runs the `capiscio` CLI in your pipeline. Blocks broken or non-compliant agents before deployment. | `TypeScript` |
+
+Adjust the exact wording if any of those wrappers do more or less, but keep the “both wrap core” message.
 
 ---
 
-## 🗺️ Roadmap: Beyond Validation
+## 🗺️ Roadmap: From Guard to Platform
 
-With our CLI and Validation tools now **Stable (v1.0)**, we are building the future of Agent Governance.
+Today, CapiscIO ships the **guard and tooling**. We’re working with design partners on the next layers.
 
-### 🚀 Q1 2026: The Trust Platform
-- **Centralized Registry**: A public ledger for verified agent identities.
-- **Trust Badges**: Verifiable credentials for high-quality agents.
-- **Dashboard**: Real-time observability for agent traffic and security events.
+### Stage 1 – The Guard _(Live)_
 
-### 🏛️ Q2 2026: Governance & Policy
-- **Policy Engine**: Define organization-wide rules (e.g., "Only talk to agents with Trust Score > 80").
-- **Audit Logs**: Immutable records of all agent-to-agent transactions.
+- Local enforcement SDK (Python) and Go middleware / sidecars.  
+- Identity, integrity, and freshness checks at the protocol boundary.  
+- `capiscio` CLI (Node and Python) plus GitHub Action for dev-time and CI validation.
 
-[View the full roadmap →](https://capisc.io/resources/roadmap)
+### Stage 2 – The Registry _(In development)_
+
+- Centralized discovery of trusted agent keys.  
+- Managed key lifecycle and trust stores for teams running many agents.
+
+### Stage 3 – The Platform _(Planned)_
+
+- Cross-agent observability and traces.  
+- Policy and governance over which agents can call which tools.  
+- Audit-friendly exports for your existing SIEM / compliance stack.
+
+We are intentionally **co-designing** Stage 2 and 3 with a small set of design partners.
+
+[Read more about the architecture and roadmap →](https://capisc.io/platform)
 
 ---
 
 ## 🤝 Contributing
 
-We are building the security standard for the AI era, and we need your help.
+We’re building the security layer we wish existed before everyone deployed multi-agent systems.
 
-1.  **Try the tools**: `npm install -g capiscio-cli`
-2.  **Join the discussion**: [Reddit](https://www.reddit.com/r/capiscio)
-3.  **Contribute**: Check out "Good First Issues" in any of our repos.
+You can help by:
+
+1. **Trying the tools**
+
+   ```bash
+   # Node CLI (recommended entry point)
+   npm install -g capiscio
+
+   # Python CLI wrapper (if you prefer Python tooling)
+   pip install capiscio
+
+   # Python guard
+   pip install capiscio-sdk-python
+
+2.  **Join the discussion**:
+ - [Reddit](https://www.reddit.com/r/capiscio)
+ - [LinkedIn](https://www.linkedin.com/company/capiscio)
+ - [X](https://x.com/capiscio)
+3.  **Contribute**: Check out "Good First Issues" in any of our repos. 
+Open issues if you hit edge cases securing agents in the wild.
 
 <div align="center">
   <sub>Built with ❤️ by the CapiscIO team. Open Source under Apache 2.0.</sub>
