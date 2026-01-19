@@ -64,6 +64,7 @@ We keep the stack small and focused: core enforcement, runtime guard, and CLI to
 | Repository | Description | Tech Stack |
 |------------|-------------|------------|
 | **[capiscio-sdk-python](https://github.com/capiscio/capiscio-sdk-python)** | Drop-in guard for Python services (FastAPI / Flask / etc). Auto-discovers keys, enforces identity, payload integrity, and replay protection at the HTTP boundary. | `Python` |
+| **[capiscio-mcp-python](https://github.com/capiscio/capiscio-mcp-python)** | MCP SDK wrapper that adds CapiscIO identity and signing to MCP servers and clients. Guards tool calls with the same protections as A2A. | `Python` |
 
 ### 🔧 Developer Tooling & CLI
 
@@ -74,12 +75,6 @@ Both CLIs wrap `capiscio-core`, so dev-time checks and runtime enforcement share
 | **[capiscio-node](https://github.com/capiscio/capiscio-node)** | Node-based `capiscio` CLI. Validate agent cards, test live endpoints, and run security checks locally or in CI. | `TypeScript / Node` |
 | **[capiscio-python](https://github.com/capiscio/capiscio-python)** | Python package `capiscio` exposing the same CLI experience and core behaviour for Python-centric environments. | `Python` |
 | **[validate-a2a](https://github.com/capiscio/validate-a2a)** | GitHub Action that runs the `capiscio` CLI in your pipeline. Validates agent cards, enforces Proof of Possession, and checks MCP server compliance. | `TypeScript` |
-
-### 🌐 Registry & Control Plane _(Beta)_
-
-| Repository | Description | Tech Stack |
-|------------|-------------|------------|
-| **[capiscio-server](https://github.com/capiscio/capiscio-server)** | Registry API and Certificate Authority. Issues Trust Badges (RFC-002), manages agent/MCP server identities, and provides key discovery. | `Go` |
 
 ---
 
