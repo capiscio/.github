@@ -31,6 +31,7 @@ Use CapiscIO as:
 
 - A **Python SDK** (SimpleGuard) to guard your agent endpoints.  
 - A **Go middleware / sidecar** in front of HTTP services.  
+- A **Docker sidecar** (`capiscio/guard`) for containerized deployments.  
 - A **CLI** (Node or Python) to validate agent cards and test endpoints in CI.
 
 ---
@@ -41,7 +42,7 @@ Use CapiscIO as:
   CLI ready, CI friendly, and a drop-in guard you can wire in with a couple of lines.
 
 - **Protocol aware**  
-  Built for the Agent-to-Agent (A2A) protocol and designed to extend to MCP and other agent standards.
+  Built for A2A and MCP protocols. Guards both agent-to-agent and agent-to-tool communication.
 
 - **Performance obsessed**  
   Go based core and a pure Python guard, both adding well under 1 ms per call in our benchmarks.
@@ -56,7 +57,7 @@ We keep the stack small and focused: core enforcement, runtime guard, and CLI to
 
 | Repository | Description | Tech Stack |
 |------------|-------------|------------|
-| **[capiscio-core](https://github.com/capiscio/capiscio-core)** | High performance enforcement engine used by sidecars and CLIs. Verifies Ed25519 JWS envelopes, enforces body hashes, and checks timestamps with microsecond-level overhead. | `Go` |
+| **[capiscio-core](https://github.com/capiscio/capiscio-core)** | High performance enforcement engine used by sidecars and CLIs. Verifies Ed25519 JWS envelopes, enforces body hashes, and checks timestamps with microsecond-level overhead. Also available as `capiscio/guard` Docker image. | `Go` |
 
 ### 🛡️ Runtime Guard (SDK)
 
@@ -72,9 +73,13 @@ Both CLIs wrap `capiscio-core`, so dev-time checks and runtime enforcement share
 |------------|-------------|------------|
 | **[capiscio-node](https://github.com/capiscio/capiscio-node)** | Node-based `capiscio` CLI. Validate agent cards, test live endpoints, and run security checks locally or in CI. | `TypeScript / Node` |
 | **[capiscio-python](https://github.com/capiscio/capiscio-python)** | Python package `capiscio` exposing the same CLI experience and core behaviour for Python-centric environments. | `Python` |
-| **[validate-a2a](https://github.com/capiscio/validate-a2a)** | GitHub Action that runs the `capiscio` CLI in your pipeline. Blocks broken or non-compliant agents before deployment. | `TypeScript` |
+| **[validate-a2a](https://github.com/capiscio/validate-a2a)** | GitHub Action that runs the `capiscio` CLI in your pipeline. Validates agent cards, enforces Proof of Possession, and checks MCP server compliance. | `TypeScript` |
 
-Adjust the exact wording if any of those wrappers do more or less, but keep the “both wrap core” message.
+### 🌐 Registry & Control Plane _(Beta)_
+
+| Repository | Description | Tech Stack |
+|------------|-------------|------------|
+| **[capiscio-server](https://github.com/capiscio/capiscio-server)** | Registry API and Certificate Authority. Issues Trust Badges (RFC-002), manages agent/MCP server identities, and provides key discovery. | `Go` |
 
 ---
 
@@ -88,9 +93,11 @@ Today, CapiscIO ships the **guard and tooling**. We’re working with design par
 - Identity, integrity, and freshness checks at the protocol boundary.  
 - `capiscio` CLI (Node and Python) plus GitHub Action for dev-time and CI validation.
 
-### Stage 2 – The Registry _(In development)_
+### Stage 2 – The Registry _(Beta)_
 
-- Centralized discovery of trusted agent keys.  
+- Centralized discovery of trusted agent and MCP server keys.  
+- Trust Badges with 5 validation levels (Self-Signed → Extended Validation).  
+- MCP Server Registry for tool identity management.  
 - Managed key lifecycle and trust stores for teams running many agents.
 
 ### Stage 3 – The Platform _(Planned)_
@@ -120,8 +127,11 @@ You can help by:
    # Python CLI wrapper (if you prefer Python tooling)
    pip install capiscio
 
-   # Python guard
-   pip install capiscio-sdk-python
+   # Python guard SDK
+   pip install capiscio-sdk
+
+   # Docker sidecar
+   docker pull capiscio/guard
 
 2.  **Join the discussion**:
  - [Reddit](https://www.reddit.com/r/capiscio)
